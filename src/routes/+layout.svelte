@@ -1,4 +1,5 @@
 <script>
+	import { page } from '$app/stores';
 	import '../app.postcss';
 </script>
 
@@ -7,7 +8,14 @@
 		<a href="/" class="btn btn-ghost normal-case text-xl"> Home </a>
 	</div>
 	<div class="flex-none gap-2">
-		<a href="/sign-in" class="btn btn-primary"> Sign In </a>
+		{#if $page.data.user}
+			<a class="btn btn-outline btn-accent" href="/app">App</a>
+			<form action="/sign-out" method="post">
+				<button type="submit" class="btn btn-outline btn-error">Sign out</button>
+			</form>
+		{:else}
+			<a href="/sign-in" class="btn btn-primary"> Sign In </a>
+		{/if}
 	</div>
 </div>
 

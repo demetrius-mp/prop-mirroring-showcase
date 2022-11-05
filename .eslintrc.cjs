@@ -20,5 +20,8 @@ module.exports = {
 	globals: {
 		svelte: true,
 		HTMLElementTagNameMap: true
+	},
+	rules: {
+		'@typescript-eslint/no-unused-vars': ['error', { ignoreRestSiblings: true }]
 	}
 };

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import FormErrors from '$lib/components/FormErrors.svelte';
 	import Input from '$lib/components/Input.svelte';
 	import type { ActionData } from './$types';
 
@@ -9,7 +10,9 @@
 	<title>Sign In</title>
 </svelte:head>
 
-<form method="post" class="flex flex-col gap-2">
+<FormErrors errors={form?._errors} />
+
+<form method="post" class="flex flex-col gap-2 mt-3">
 	<Input
 		required
 		errors={form?.email?._errors}

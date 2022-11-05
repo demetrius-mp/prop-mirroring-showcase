@@ -1,7 +1,9 @@
 import formDataToJSON from '$lib/formDataToJSON';
-import type { Actions } from './$types';
+import type { Actions, PageServerLoad } from './$types';
 import { z } from 'zod';
-import { invalid } from '@sveltejs/kit';
+import { invalid, redirect } from '@sveltejs/kit';
+import db from '$lib/server/db';
+import AuthService from '$lib/server/AuthService';
 
 const signUpSchema = z
 	.object({
@@ -15,8 +17,16 @@ const signUpSchema = z
 		path: ['confirmPassword']
 	});
 
+export const load: PageServerLoad = async ({ locals }) => {
+	if (locals.user) {
+		throw redirect(302, '/app');
+	}
+};
+
 export const actions: Actions = {
 	default: async ({ request }) => {
+		type ValidationError = z.ZodFormattedError<z.infer<typeof signUpSchema>>;
+
 		const formData = await request.formData();
 		const json = formDataToJSON(formData);
 
@@ -26,8 +36,38 @@ export const actions: Actions = {
 			return invalid(400, parsedData.error.format());
 		}
 
-		return {
-			success: true
-		};
+		const {
+			data: { confirmPassword, ...data }
+		} = parsedData;
+
+		const existingUser = await db.user.findUnique({
+			where: {
+				email: data.email
+			}
+		});
+
+		if (existingUser) {
+			const zodError = new z.ZodError([
+				{
+					code: 'custom',
+					message: 'This email is already being used',
+					path: []
+				}
+			]);
+
+			return invalid(400, zodError.format() as ValidationError);
+		}
+
+		await db.user.create({
+			data: {
+				...data,
+				password: await AuthService.generatePasswordHash(data.password)
+			},
+			select: {
+				id: true
+			}
+		});
+
+		throw redirect(302, '/sign-in');
 	}
 };
