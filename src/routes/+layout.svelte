@@ -6,8 +6,8 @@
 	<div class="flex-1">
 		<a href="/" class="btn btn-ghost normal-case text-xl"> Home </a>
 	</div>
-	<div class="flex-none">
-		<a href="/sign-in" class="btn btn-outline btn-primary"> Sign In </a>
+	<div class="flex-none gap-2">
+		<a href="/sign-in" class="btn btn-primary"> Sign In </a>
 	</div>
 </div>
 

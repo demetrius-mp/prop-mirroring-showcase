@@ -1,34 +1,14 @@
 <script lang="ts">
-	type HTMLInputType =
-		| 'button'
-		| 'checkbox'
-		| 'color'
-		| 'date'
-		| 'datetime-local'
-		| 'email'
-		| 'file'
-		| 'hidden'
-		| 'image'
-		| 'month'
-		| 'number'
-		| 'password'
-		| 'radio'
-		| 'range'
-		| 'reset'
-		| 'search'
-		| 'submit'
-		| 'tel'
-		| 'text'
-		| 'time'
-		| 'url'
-		| 'week';
+	interface $$Props extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap['input']> {
+		name: string;
+		label?: string;
+		errors?: string[];
+		class?: string;
+	}
 
 	export let name: string;
-	export let label: string | null = null;
+	export let label: string | undefined = undefined;
 	export let errors: string[] | undefined = undefined;
-	export let placeholder: string | undefined = undefined;
-	export let type: HTMLInputType;
-
 	let klass = '';
 	export { klass as class };
 </script>
@@ -44,19 +24,20 @@
 
 	<input
 		{name}
-		{type}
-		{placeholder}
 		class:input-error={errors}
 		class="input input-bordered w-full {klass}"
+		{...$$restProps}
 	/>
 
-	{#if errors}
+	{#if errors !== undefined && errors.length > 0}
 		<label for={name} class="label">
-			{#each errors as error}
-				<span class="label-text-alt text-error">
-					{error}
-				</span>
-			{/each}
+			<span class="label-text-alt text-error flex flex-col">
+				{#each errors as error}
+					<span>
+						{error}
+					</span>
+				{/each}
+			</span>
 		</label>
 	{/if}
 </div>

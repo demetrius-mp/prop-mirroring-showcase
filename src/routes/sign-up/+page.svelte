@@ -6,10 +6,20 @@
 </script>
 
 <svelte:head>
-	<title>Sign In</title>
+	<title>Sign Up</title>
 </svelte:head>
 
 <form method="post" class="flex flex-col gap-2">
+	<Input
+		required
+		minlength={3}
+		errors={form?.name?._errors}
+		name="name"
+		type="text"
+		label="Name"
+		placeholder="John Doe"
+	/>
+
 	<Input
 		required
 		errors={form?.email?._errors}
@@ -29,9 +39,19 @@
 		placeholder="********"
 	/>
 
+	<Input
+		required
+		minlength={8}
+		errors={form?.confirmPassword?._errors}
+		name="confirmPassword"
+		type="password"
+		label="Confirm password"
+		placeholder="********"
+	/>
+
 	<span>
-		Don't have an account?
-		<a href="/sign-up" class="link"> Sign up instead </a>
+		Already have an account?
+		<a href="/sign-in" class="link"> Sign in instead </a>
 	</span>
 
 	<button class="btn btn-primary"> submit </button>
