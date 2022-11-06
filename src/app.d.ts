@@ -4,6 +4,7 @@
 declare namespace App {
 	interface Locals {
 		user?: Omit<import('@prisma/client').User, 'password'>;
+		theme: import('$lib/theme').Theme;
 	}
 	interface PageData {
 		user?: Locals['user'];

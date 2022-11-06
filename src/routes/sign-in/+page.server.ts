@@ -4,7 +4,6 @@ import { z } from 'zod';
 import { invalid, redirect } from '@sveltejs/kit';
 import db from '$lib/server/db';
 import AuthService from '$lib/server/AuthService';
-import { NODE_ENV } from '$env/static/private';
 
 const signInSchema = z.object({
 	email: z.string().email(),
@@ -58,7 +57,6 @@ export const actions: Actions = {
 			path: '/',
 			httpOnly: true,
 			sameSite: 'strict',
-			secure: NODE_ENV === 'production',
 			maxAge: 60 * 60 * 24 * 30
 		});
 
